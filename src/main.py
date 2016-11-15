@@ -47,16 +47,21 @@ def main():
                         help='File with a list of parishes', default="../data/seurakunnat.txt")
     parser.add_argument('--villagefile', type=str,
                         help='File with a list of villages', default="../data/kylat.txt")
-    
- 
+    # Place processing args
+    parser.add_argument('--indi-names', action='store_true',
+                        help='Check and repair person names')
+  
     args = parser.parse_args()
     if (args.reverse or args.add_commas or args.auto_order):
         print("*** Processing places")
         process_gedcom.init_places(args)
     else:
-        print("Nothing to do!")
-        return
-    
+        if (args.indi_names):
+            print("*** Processing person names")
+        else:
+            print("Nothing to do!")
+            return
+
     process_gedcom.process_gedcom(args)
 
 

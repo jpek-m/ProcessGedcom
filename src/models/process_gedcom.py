@@ -5,6 +5,7 @@
 
 from views import html_out
 from models import gedcom_places
+from models import gedcom_names
 
 
 def init_places(args):
@@ -16,7 +17,7 @@ def init_places(args):
 def process_gedcom(args):
     linenum = ""
     line = ""
-    incnt = 0
+    cnt_in = 0
     if args.output_gedcom:
         f = open(args.output_gedcom,"w",encoding=args.encoding)
     else:
@@ -26,28 +27,42 @@ def process_gedcom(args):
                 in enumerate(open(args.input_gedcom, encoding=args.encoding)):
             line = line.strip()
             tkns = line.split(None,2)
-            incnt += 1
+            cnt_in += 1
+            if tkns[0] == '0':
+                if len(tkns) < 3:
+                    path = line
+                else:
+                    a = tkns[2].split(None,2)
+                    path = "{} {}".format(tkns[0], a[0])
+                #print ("Path: {!r} Line: {!r} ".format(path, line))
             
             if tkns[1] == "PLAC":
-                newline = gedcom_places.process(args, tkns, incnt)
+                newline = gedcom_places.process(args, tkns, cnt_in)
                 if newline:
                     line = newline
-            
+            if (path == '0 INDI') & (tkns[1] == "NAME"):
+                #print ("Name: {}".format(line))
+                newline = gedcom_names.process(args, tkns, cnt_in)
+                if newline:
+                    line = newline
+
             if f:
                 f.write(line + "\n")
-            
+
     except (Exception) as e:
         print("*** Virhe rivillä {}: {}\n\t linenum='{}', line='{}'".
-              formt(str(e), str(linenum), line))
+              format(str(e), str(linenum), line))
     finally:
         if f: 
             f.close()
         else: 
             if args.list_html: 
                 html_out.close()
+        print ("--- Total {} input lines".format(cnt_in))
 
 
-def check(input,expected_output,reverse=False,add_commas=False,ignore_lowercase=False,ignore_digits=False):
+def check(input, expected_output, reverse=False, add_commas=False,
+          ignore_lowercase=False, ignore_digits=False):
     class Args: pass
     args = Args()
     args.reverse = reverse
