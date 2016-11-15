@@ -9,6 +9,6 @@ Fixing gedcom to follow Finnish national style
    - gedcom_names.py      # Processes NAME tag
  - views/
    - html_out.py          # Some html-output (to be removed)
- - static/
-      # Static name lists etc
+ - static/                # Static name lists etc
+ - data/                  # User files (not in git)
 ```
