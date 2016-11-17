@@ -4,7 +4,6 @@
 ##
 
 from collections import defaultdict 
-
 from views import html_out
 
 ignored_text = """
@@ -160,7 +159,7 @@ def process(args, tkns, incnt):
     newplace = process_place(args,place)
     if newplace != place: 
         if args.display_changes:
-            print("{:>5}: '{:<40} -> '{}'".format(incnt, place + "'",newplace))
+            print("{:>5}: PLAC '{:<40} -> '{}'".format(incnt, place + "'",newplace))
         tkns[2] = newplace  
         line = " ".join(tkns)
     else:

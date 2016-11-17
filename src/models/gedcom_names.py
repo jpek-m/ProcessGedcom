@@ -3,6 +3,8 @@
 # To change this template file, choose Tools | Templates
 # and open the template in the editor.
 
+from views import html_out
+
 NONAME = 'N'
 
 def process_name(args, name):
@@ -12,7 +14,8 @@ def process_name(args, name):
         if (givn):
             gnames = givn.split()
             l = len(gnames) - 1
-            if (l > 0) & (gnames[l].endswith('poika')):
+            if (l > 0) & \
+               ((gnames[l].endswith('poika') | (gnames[l].endswith('tytär')))):
                 #print('# {} | {!r} | {!r}'.format(gnames, surn, spfx))
                 spfx = gnames[l]
                 gnames = gnames[:l]
@@ -30,15 +33,15 @@ def process_name(args, name):
  
 def process(args, tkns, incnt):
     # Here tkns[1] == "NAME", tkns[2] is like 'Johan Johanpoika /Sihvola/'
-    print("{:>5}: {}".format(incnt, tkns))
 
+    #print("{:>5}: {}".format(incnt, tkns))
     if len(tkns) < 3:
         return ""
     name = tkns[2]
     newname = process_name(args, name)
     if newname != name: 
         if args.display_changes:
-            print("{:>5}: '{:<40} -> '{}'".format(incnt, name + "'",newname))
+            print("{:>5}: NAME '{:<40} -> '{}'".format(incnt, name + "'",newname))
         tkns[2] = newname  
         line = " ".join(tkns)
     else:

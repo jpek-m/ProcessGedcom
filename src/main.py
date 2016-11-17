@@ -9,7 +9,9 @@ import argparse
 
 from models import process_gedcom
 
-def main():
+if __name__ == "__main__":
+    # Parse arguments and start processing of gedcom file
+    
     parser = argparse.ArgumentParser(description='Manipulates GEDCOM information')
     # Onput and output .ged files
     parser.add_argument('input_gedcom', 
@@ -20,8 +22,8 @@ def main():
     parser.add_argument('--encoding', type=str, default="utf-8",
                         help="UTF-8, Latin-1 tai jokin muu")
     # Display options
-    parser.add_argument('--list-html', action='store_true',
-                        help='Shows a list of changes in html')
+    parser.add_argument('--list-html', type=str, default="",
+                        help='Prints a list of changes in html')
     parser.add_argument('--display-changes', action='store_true',
                         help='Display changed places')
     parser.add_argument('--display-ignored', action='store_true',
@@ -50,20 +52,20 @@ def main():
     # Place processing args
     parser.add_argument('--indi-names', action='store_true',
                         help='Check and repair person names')
-  
+
     args = parser.parse_args()
     if (args.reverse or args.add_commas or args.auto_order):
         print("*** Processing places")
         process_gedcom.init_places(args)
+
+    if (args.indi_names):
+        print("*** Processing person names")
     else:
-        if (args.indi_names):
-            print("*** Processing person names")
-        else:
-            print("Nothing to do!")
-            return
+        print("Nothing to do!")
+        exit
+    
+    if (args.list_html):
+        print("*** creating " + args.list_html)
+        process_gedcom.init_html(args)
 
     process_gedcom.process_gedcom(args)
-
-
-if __name__ == "__main__":
-    main()

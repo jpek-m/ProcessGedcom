@@ -1,1 +1,8 @@
 /nbproject/private/
+/src/__pycache__/
+/src/models/__pycache__/
+/src/views/__pycache__/
+/nbproject/
+/data/Miun-testi.ged
+/src/out.html
+/data/jtt_ubuntu_gramps.ged

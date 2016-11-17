@@ -13,6 +13,9 @@ def init_places(args):
         gedcom_places.read_villages(args.villagefile)
         gedcom_places.test()
 
+def init_html(args):
+        html_out.init(args)
+
 
 def process_gedcom(args):
     linenum = ""
@@ -40,6 +43,7 @@ def process_gedcom(args):
                 newline = gedcom_places.process(args, tkns, cnt_in)
                 if newline:
                     line = newline
+
             if (path == '0 INDI') & (tkns[1] == "NAME"):
                 #print ("Name: {}".format(line))
                 newline = gedcom_names.process(args, tkns, cnt_in)
@@ -49,9 +53,12 @@ def process_gedcom(args):
             if f:
                 f.write(line + "\n")
 
-    except (Exception) as e:
-        print("*** Virhe rivillä {}: {}\n\t linenum='{}', line='{}'".
-              format(str(e), str(linenum), line))
+    except (BrokenPipeError):
+        print("*** Katkaistu riviltä {}".format(str(linenum)))
+
+#    except (Exception) as e:
+#        print("*** Virhe rivillä {}: {}\n\t linenum='{}', line='{}'".
+#              format(str(e), str(linenum), line))
     finally:
         if f: 
             f.close()
