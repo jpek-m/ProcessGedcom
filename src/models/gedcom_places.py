@@ -5,51 +5,14 @@
 
 from collections import defaultdict 
 from views import html_out
-
-ignored_text = """
-mlk
-msrk
-ksrk
-tksrk
-maalaiskunta
-maaseurakunta
-kaupunkiseurakunta
-tuomiokirkkoseurakunta
-rykmentti
-pitäjä
-kylä
-
-hl
-tl
-ol
-ul
-vpl
-vl
-
-tai
-
-de
-las
-
-"""
+import static.places
 
 ignored = [name.strip() for name \
-           in ignored_text.splitlines()
+           in static.places.ignored_text.splitlines()
               if name.strip() != ""]
 
 
 parishes = set()
-
-countries = {
-    "Finland", "Suomi",
-    "USA", "Yhdysvallat",
-    "Kanada",
-    "Alankomaat",
-    "Ruotsi",
-    "Australia",
-    "Venäjä",
-    "Eesti", "Viro",
-}
 
 villages = defaultdict(set)
 
@@ -88,28 +51,13 @@ def ignore_place(args,names):
             return True
     return False
 
-auto_combines = [
-    "n pitäjä",
-    "n srk",
-    "n seurakunta",
-    "n maalaiskunta",
-    "n maaseurakunta",
-    "n kaupunkiseurakunta",
-    "n tuomiokirkkoseurakunta",
-    "n rykmentti",
-    "n kylä",
-    "n mlk",
-    "n msrk",
-    "n ksrk",
-]
-
 def auto_combine(place):
-    for s in auto_combines:
+    for s in static.places.auto_combines:
         place = place.replace(s,s.replace(" ","-"))
     return place
     
 def revert_auto_combine(place):
-    for s in auto_combines:
+    for s in static.places.auto_combines:
         place = place.replace(s.replace(" ","-"),s)
     return place
 
@@ -140,9 +88,9 @@ def process_place(args,place):
             #print(names)
             if names[0].lower() in parishes \
                and names[1].lower() in villages[names[0].lower()] \
-               and names[-1] not in countries:
+               and names[-1] not in static.places.countries:
                 do_reverse = True
-            if names[0] in countries:
+            if names[0] in static.places.countries:
                 do_reverse = True
         if args.reverse or do_reverse:
             names.reverse()
