@@ -1,5 +1,5 @@
 # ProcessGedcom
-Fixing gedcom to follow Finnish national style
+The first, obsolete experiment for fixing gedcom to follow Finnish national style.
 ```
 - src/
  - main.py                 # See: Python3 main.py -h
